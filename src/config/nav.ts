@@ -15,7 +15,7 @@ export const navItems: NavItem[] = [
   },
   {
     title: "画像生成",
-    href: "/dashboard/tools/image-genarator",
+    href: "/dashboard/tools/image-generator",
     icon: Image,
   },
   {
