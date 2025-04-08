@@ -1,3 +1,4 @@
+import BackgroundRemover from "@/components/dashboard/tools/background-remover";
 import ImageGenerator from "@/components/dashboard/tools/image-generator";
 
 export const tools = {
@@ -9,7 +10,7 @@ export const tools = {
   "remove-bg": {
     title: "背景削除",
     description: "画像から背景を自動で削除",
-    component: ImageGenerator,
+    component: BackgroundRemover,
   },
   optimize: {
     title: "画像圧縮",
