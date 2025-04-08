@@ -1,3 +1,4 @@
+import AuthButton from "@/components/auth/auth-button";
 import MobileNav from "@/components/dashboard/mobile-nav";
 import DashboardNav from "@/components/dashboard/nav";
 import { Toaster } from "@/components/ui/sonner";
@@ -14,9 +15,15 @@ export default function RootLayout({
       <header className="sticky top-0 z-40 border-b bg-background">
         <div className="conatiner flex items-center h-16 px-4">
           <MobileNav />
-          <Link href="/">
-            <h1 className="text-lg font-bold">AI Image Generator</h1>
-          </Link>
+          <div className="flex items-center w-full">
+            <Link href="/">
+              <h1 className="text-lg font-bold">AI Image Generator</h1>
+            </Link>
+
+            <div className="ml-auto hidden md:block">
+              <AuthButton />
+            </div>
+          </div>
         </div>
       </header>
       {/* dashboard */}
