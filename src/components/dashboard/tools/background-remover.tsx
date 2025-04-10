@@ -10,12 +10,14 @@ import { Download, Layers } from "lucide-react";
 import React, { useActionState } from "react";
 import LoadingSpinner from "../loading-spinner";
 import { toast } from "sonner";
+import { SignInButton, useUser } from "@clerk/nextjs";
 
 const initialState: GenerateImageState = {
   status: "idle",
 };
 
 const BackgroundRemover = () => {
+  const { isSignedIn } = useUser();
   const [state, formAction, pending] = useActionState(
     removeBackground,
     initialState
@@ -66,20 +68,29 @@ const BackgroundRemover = () => {
             />
           </div>
           {/* submit button */}
-          <Button
-            type="submit"
-            disabled={pending}
-            className={cn("w-full duration-200", pending && "bg-primary")}
-          >
-            {pending ? (
-              <LoadingSpinner />
-            ) : (
-              <>
+          {isSignedIn ? (
+            <Button
+              type="submit"
+              disabled={pending}
+              className={cn("w-full duration-200", pending && "bg-primary")}
+            >
+              {pending ? (
+                <LoadingSpinner />
+              ) : (
+                <>
+                  <Layers className="mr-2" />
+                  背景を削除
+                </>
+              )}
+            </Button>
+          ) : (
+            <SignInButton>
+              <Button className="w-full">
                 <Layers className="mr-2" />
-                背景を削除
-              </>
-            )}
-          </Button>
+                ログインして背景を削除
+              </Button>
+            </SignInButton>
+          )}
         </form>
       </div>
       {/* image preview */}
