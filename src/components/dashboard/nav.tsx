@@ -2,8 +2,12 @@ import React from "react";
 import AuthButton from "../auth/auth-button";
 import CreditDisplay from "./credit-display";
 import NavItems from "./nav-items";
+import { Button } from "../ui/button";
+import Link from "next/link";
+import { currentUser } from "@clerk/nextjs/server";
 
-const DashboardNav = () => {
+const DashboardNav = async () => {
+  const user = await currentUser();
   return (
     <nav className="grid gap-2 items-start">
       <NavItems />
@@ -12,6 +16,15 @@ const DashboardNav = () => {
       </div>
       <div className="p-4">
         <CreditDisplay />
+        {user && (
+          <Button
+            asChild
+            className="w-full mt-4 text-white"
+            variant={"premium"}
+          >
+            <Link href={"/dashboard/plan"}>アップグレード</Link>
+          </Button>
+        )}
       </div>
     </nav>
   );
