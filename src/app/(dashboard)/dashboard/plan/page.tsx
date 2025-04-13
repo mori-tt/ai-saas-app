@@ -1,28 +1,34 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { createStripeSession } from "@/actions/stripe";
 import { Button } from "@/components/ui/button";
 import { plans } from "@/config/plans";
+import { StripeState } from "@/types/actions";
 import { Check } from "lucide-react";
 import { useActionState } from "react";
 import { toast } from "sonner";
 
-const initialState = {
+const initialState: StripeState = {
   status: "idle",
   error: "",
+  redirectUrl: "",
 };
 
 const Plan = () => {
-  const [state, formAction] = useActionState(async (prevState, formData) => {
-    const result = await createStripeSession(prevState, formData);
+  const [state, formAction, pending] = useActionState(
+    async (prevState: StripeState, formData: FormData) => {
+      const result = await createStripeSession(prevState, formData);
 
-    if (result.status === "error") {
-      toast.error(result.error);
-    } else if (result.status === "success" && result.redirectUrl) {
-      window.location.href = result.redirectUrl;
-    }
+      if (result.status === "error") {
+        toast.error(result.error);
+      } else if (result.status === "success" && result.redirectUrl) {
+        window.location.href = result.redirectUrl;
+      }
 
-    return result;
-  }, initialState);
+      return result;
+    },
+    initialState
+  );
 
   return (
     <div className="container py-8 mx-auto">
