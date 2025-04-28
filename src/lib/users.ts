@@ -1,46 +1,66 @@
-import { NextResponse } from "next/server";
 import { prisma } from "./prisma";
 
+/**
+ * Clerkからのwebhookで呼び出されるユーザー作成関数
+ */
 export async function createUser(clerkId: string, email: string) {
   try {
+    // ユーザーが既に存在する場合は作成しない
+    const existingUser = await prisma.user.findUnique({
+      where: { clerkId },
+    });
+
+    if (existingUser) {
+      console.log(`ユーザーは既に存在します: ClerkID=${clerkId}`);
+      return existingUser;
+    }
+
+    // 新規ユーザー作成
     const user = await prisma.user.create({
       data: {
-        clerkId: clerkId,
-        email: email,
+        clerkId,
+        email,
         credits: 5,
         subscriptionStatus: "FREE",
       },
     });
-    return NextResponse.json({ user }, { status: 201 });
+    console.log(`ユーザー作成成功: ID=${user.id}, Email=${email}`);
+    return user;
   } catch (error) {
-    console.error("Failed to create User:", error);
-    return NextResponse.json({ error }, { status: 500 });
+    console.error(`ユーザー作成エラー: ClerkID=${clerkId}`, error);
+    throw error;
   }
 }
 
+/**
+ * ユーザー情報更新関数
+ */
 export async function updateUser(clerkId: string, email: string) {
   try {
     const user = await prisma.user.update({
-      where: { clerkId: clerkId },
-      data: {
-        email: email,
-      },
+      where: { clerkId },
+      data: { email },
     });
-    return NextResponse.json({ user }, { status: 200 });
+    console.log(`ユーザー更新成功: ID=${user.id}, Email=${email}`);
+    return user;
   } catch (error) {
-    console.error("Failed to create User:", error);
-    return NextResponse.json({ error }, { status: 500 });
+    console.error(`ユーザー更新エラー: ClerkID=${clerkId}`, error);
+    throw error;
   }
 }
 
+/**
+ * ユーザー削除関数
+ */
 export async function deleteUser(clerkId: string) {
   try {
     const user = await prisma.user.delete({
-      where: { clerkId: clerkId },
+      where: { clerkId },
     });
-    return NextResponse.json({ user }, { status: 200 });
+    console.log(`ユーザー削除成功: ID=${user.id}`);
+    return user;
   } catch (error) {
-    console.error("Failed to create User:", error);
-    return NextResponse.json({ error }, { status: 500 });
+    console.error(`ユーザー削除エラー: ClerkID=${clerkId}`, error);
+    throw error;
   }
 }

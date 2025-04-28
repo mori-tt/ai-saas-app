@@ -15,21 +15,23 @@ model User {
   stripeCustomerId String? @unique
   credits Int @default(5)
   subscriptionStatus SubscriptionStatus @default(FREE)
-  subscriptions Subscription?
+  subscription Subscription? // 1つのサブスクリプションのみを持つ
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Subscription {
-  id String @id @default(uuid())
-  userId String @unique
-  user User @relation(fields:[userId], references:[id])
-  stripeSubscriptionId String @unique
-  stripePriceId String
+  id                     String   @id @default(cuid())
+  userId                 String   @unique // ここを@uniqueにして1:1関係を強制
+  user                   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeSubscriptionId   String   @unique
+  stripePriceId          String
   stripeCurrentPeriodEnd DateTime
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+  canceledAt             DateTime?
+  status                 String   @default("ACTIVE")
+  
   @@index([userId])
 }
 

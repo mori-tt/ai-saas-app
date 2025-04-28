@@ -3,9 +3,18 @@ import { currentUser } from "@clerk/nextjs/server";
 import { Loader2, Lock } from "lucide-react";
 import React, { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
+// キャッシュを使わないラッパー関数
+async function getCreditsWithRevalidation() {
+  // revalidatePathの呼び出しを削除
+  return await getUserCredits();
+}
+
 async function CreditsContent() {
   const user = await currentUser();
-  const credits = await getUserCredits();
+  const credits = await getCreditsWithRevalidation();
+
   if (!user) {
     return (
       <div className="rounded-lg border bg-background p-4">
@@ -19,6 +28,7 @@ async function CreditsContent() {
       </div>
     );
   }
+
   return (
     <div className="rounded-lg border bg-background p-4">
       <div className="text-sm font-medium text-muted-foreground">

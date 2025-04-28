@@ -1,5 +1,5 @@
 import PageContainer from "@/components/dashboard/page-container";
-import PageHeader from "@/components/dashboard/page-headerheader";
+import PageHeader from "@/components/dashboard/page-header";
 import { tools, ToolType } from "@/config/tools";
 import { notFound } from "next/navigation";
 

@@ -2,6 +2,7 @@ import AuthButton from "@/components/auth/auth-button";
 import MobileNav from "@/components/dashboard/mobile-nav";
 import DashboardNav from "@/components/dashboard/nav";
 import { Toaster } from "@/components/ui/sonner";
+import PaymentRedirectHandler from "@/components/stripe/payment-redirect-handler";
 import Link from "next/link";
 
 export default function RootLayout({
@@ -11,6 +12,9 @@ export default function RootLayout({
 }>) {
   return (
     <div>
+      {/* Stripe決済リダイレクトハンドラー (認証問題対応) */}
+      <PaymentRedirectHandler />
+
       {/* header */}
       <header className="sticky top-0 z-40 border-b bg-background">
         <div className="conatiner flex items-center h-16 px-4">
